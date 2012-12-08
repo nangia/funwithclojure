@@ -14,18 +14,6 @@
      (for [anelement avector]
        [anelement (remove (fn equaltoanelement [x] (== anelement x)) avector)]))))
 
-(defn permrevseq->num [theseq]
-  ;; Given a seq [1 2 3 4] maps it to 4321
-  ;; used as a helper by function permseq->num
-  (let [restseq (rest theseq), firstinseq (first theseq)]
-    (if (empty? restseq)
-      firstinseq
-      (+ firstinseq 
-         (* 10 (permrevseq->num restseq))))))
-
-(defn permseq->num [theseq]
-  ;; Given a sequence [1 2 3 4] maps it to the number 1234
-  (permrevseq->num (reverse theseq)))
 
 (defn permseq->num [theseq]
   (Integer/parseInt (apply str theseq)))
