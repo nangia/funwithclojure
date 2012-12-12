@@ -14,7 +14,7 @@
      (power a b 1)))
 
 (defn problem56[]
-  (apply max 
+  (reduce max 
          (map sumofdigits
               (for [a (range 1 100), b (range 1 100)]
                 (power a b)))))
