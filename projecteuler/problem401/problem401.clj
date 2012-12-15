@@ -14,6 +14,8 @@
 (defn ten-power [n]
   (apply * (take n (repeat 10))))
 
+(defn mod9num-padwithzero [x]
+  (take 10 (lazy-cat x (repeat 0))))
 
 (defn num->mod9num [n]
   (let [procnum (fn [x]
@@ -30,21 +32,20 @@
            (take-while filtercriterion)
            (drop 1)
            (take 10)
-           (map #(second %1))))))
+           (map #(second %1))
+           (mod9num-padwithzero)))))
 
 (defn mod9num->num [x]
   (reduce + (map * x (take 10
                            (iterate #(* 10 %1) 1)))))
 
 
-(defn mod9num-padwithzero [x]
-  (take 10 (lazy-cat x (repeat 0))))
 
 
 
 ;;;; finish the function below and one for multiplication
-(defn mod9sum
-  ([x y] (mod9sum x y 0))
+(defn mod9sum-helper
+  ([x y] (mod9sum-helper x y 0))
   ([x y carry]
      (if (empty? x)
        (lazy-cat [carry])
@@ -52,10 +53,24 @@
              newcarry (quot thesum 10)
              newsum (rem thesum 10)]
          (lazy-cat [newsum]
-                   (mod9sum (rest x) (rest y) newcarry))))))
+                   (mod9sum-helper (rest x) (rest y) newcarry))))))
+
+(defn mod9sum [x y]
+  (take 10 (mod9sum-helper)))
+
+(defn testmod9sum [x y]
+  (let [mod9x (num->mod9num x)
+        mod9y (num->mod9num y)
+        sum (mod9sum mod9x mod9y)]
+    (print mod9x)
+    (print mod9y)
+    (print sum)))
 
 
-          
+  
+
+           
+
 (defn sigma2 [n]
   ;; calculate sum of squares of divisors
   (->> (factors-seq n) ;; series has the factors of n
@@ -68,6 +83,7 @@
        (map sigma2)
        (reduce +)))
 
+(testmod9sum 234 456)
 
 
 ;(big-sigma2 (ten-power 5))
